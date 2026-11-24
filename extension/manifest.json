@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Unified AI + CNN CAPTCHA Solver",
+  "version": "1.2.0",
+  "description": "Upgraded MV3 extension merging NopeCHA (Text, reCAPTCHA, hCaptcha, FunCaptcha, AWS WAF) with local ONNX OCR/Detection, OpenCV Puzzle/Rotate, Whisper Audio, and Vision AI.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["http://127.0.0.1/*", "http://localhost/*", "<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Unified CAPTCHA Solver"
+  },
+  "icons": {
+    "16": "icon/16.png",
+    "32": "icon/32.png",
+    "48": "icon/48.png",
+    "128": "icon/128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_utils.js", "content_text.js", "content_locator.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://*.google.com/recaptcha/*", "*://*.recaptcha.net/recaptcha/*", "*://recaptcha.net/recaptcha/*"],
+      "js": ["content_utils.js", "content_recaptcha.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://*.hcaptcha.com/captcha/*"],
+      "js": ["content_utils.js", "content_hcaptcha.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    },
+    {
+      "matches": ["*://*.arkoselabs.com/fc/*", "*://*.funcaptcha.com/fc/*"],
+      "js": ["content_utils.js", "content_funcaptcha.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_utils.js", "content_awscaptcha.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ]
+}
